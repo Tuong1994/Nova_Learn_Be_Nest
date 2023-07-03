@@ -1,0 +1,258 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id       String @id @default(uuid())
+  account  String @unique
+  password String
+
+  firstName String
+  lastName  String
+  fullName  String
+  phone     String
+  email     String @unique
+  role      Int
+
+  gender       Int?
+  birthday     String?
+  address      String?
+  cityCode     String?
+  districtCode String?
+  wardCode     String?
+  fullAddress  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  comments Comment[]
+  rates    Rate[]
+  courses  Course[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courses Course[]
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  nameEng     String
+  nameVn      String
+  descriptEng String   @db.VarChar(2500)
+  descriptVn  String   @db.VarChar(2500)
+  fee         Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projectInfoEng String? @db.VarChar(2500)
+  projectInfoVn  String? @db.VarChar(2500)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  outputs  CourseOutput[]
+  topics   CourseTopic[]
+  projects CourseProject[]
+  classes  ClassRoom[]
+  tags     Tag[]
+  rates    Rate[]
+  students Student[]
+  comments Comment[]
+  duration CourseDuration?
+}
+
+model CourseOutput {
+  id         String   @id @default(uuid())
+  contentEng String   @db.VarChar(2500)
+  contentVn  String   @db.VarChar(2500)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model CourseDuration {
+  id        String   @id @default(uuid())
+  month     Int
+  week      Int
+  session   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId String @unique
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model CourseTopic {
+  id        String   @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  tags Tag[]
+}
+
+model CourseProject {
+  id          String   @id @default(uuid())
+  name        String
+  descriptEng String   @db.VarChar(2500)
+  descriptVn  String   @db.VarChar(2500)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  tags  Tag[]
+  toDos ProjectTask[]
+}
+
+model ProjectTask {
+  id        String   @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId String
+  project   CourseProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  toDos TaskToDo[]
+}
+
+model TaskToDo {
+  id         String   @id @default(uuid())
+  contentEng String   @db.VarChar(2500)
+  contentVn  String   @db.VarChar(2500)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  taskId      String
+  projectTask ProjectTask @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model ClassRoom {
+  id        String   @id @default(uuid())
+  name      String
+  openDate  String
+  time      String
+  location  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course  Course[]
+  project CourseProject[]
+  topic   CourseTopic[]
+
+  // courseId String
+  // course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // topicId String
+  // topic   CourseTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  // projectId String
+  // project   CourseProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Blog {
+  id        String    @id @default(uuid())
+  content   String    @db.VarChar(3000)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+}
+
+model Comment {
+  id          String   @id @default(uuid())
+  commentText String   @db.VarChar(2500)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  blogId String
+  blog   Blog   @relation(fields: [blogId], references: [id], onDelete: Cascade)
+}
+
+model Rate {
+  id        String   @id @default(uuid())
+  point     Int
+  note      String   @db.VarChar(2500)
+  createdAt DateTime @default(now())
+  updated   DateTime @updatedAt
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model City {
+  id        String     @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  code      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  districts District[]
+}
+
+model District {
+  id        String   @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cityCode String
+  city     City   @relation(fields: [cityCode], references: [code], onDelete: Cascade)
+
+  wards Ward[]
+}
+
+model Ward {
+  id        String   @id @default(uuid())
+  nameEng   String
+  nameVn    String
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  districtCode String
+  district     District @relation(fields: [districtCode], references: [code], onDelete: Cascade)
+}
