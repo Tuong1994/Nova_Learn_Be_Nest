@@ -1,15 +1,13 @@
-import { HttpException, Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
+import { HttpException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class StudentService {
-    constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) {}
 
-    async getStudents() {
-        try {
-            
-        } catch (error) {
-            
-        }
-    }
+  async getStudents() {
+    const students = await this.prisma.student.findMany();
+
+    return students
+  }
 }
