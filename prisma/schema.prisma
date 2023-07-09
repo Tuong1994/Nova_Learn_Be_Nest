@@ -15,26 +15,49 @@ model Student {
   account  String @unique
   password String
 
-  firstName String
-  lastName  String
-  fullName  String
-  phone     String
-  email     String @unique
-  role      Int
+  phone String
+  email String @unique
+  role  Int
 
-  gender       Int?
-  birthday     String?
-  address      String?
-  cityCode     String?
-  districtCode String?
-  wardCode     String?
-  fullAddress  String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  firstName      String?
+  lastName       String?
+  fullName       String?
+  gender         Int?
+  birthday       String?
+  address        String?
+  cityCode       String?
+  districtCode   String?
+  wardCode       String?
+  fullAddressEng String?
+  fullAddressVn  String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   comments Comment[]
   rates    Rate[]
-  courses  Course[]
+  courses  StudentsOnCourses[]
+
+  avatar Image?
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  path       String
+  removePath String
+  size       Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  studentId String  @unique
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model Auth {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -67,10 +90,11 @@ model Course {
   topics   CourseTopic[]
   projects CourseProject[]
   classes  ClassRoom[]
-  tags     Tag[]
+  tags     CoursesOnTags[]
   rates    Rate[]
-  students Student[]
+  students StudentsOnCourses[]
   comments Comment[]
+
   duration CourseDuration?
 }
 
@@ -107,7 +131,7 @@ model CourseTopic {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  tags Tag[]
+  tags TopicsOnTags[]
 }
 
 model CourseProject {
@@ -121,8 +145,8 @@ model CourseProject {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  tags  Tag[]
-  toDos ProjectTask[]
+  tags  ProjectsOnTags[]
+  tasks ProjectTask[]
 }
 
 model ProjectTask {
@@ -164,22 +188,14 @@ model ClassRoom {
 
 model Tag {
   id        String   @id @default(uuid())
-  name      String
+  nameEng   String
+  nameVn    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  course  Course[]
-  project CourseProject[]
-  topic   CourseTopic[]
-
-  // courseId String
-  // course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  // topicId String
-  // topic   CourseTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
-
-  // projectId String
-  // project   CourseProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  courses  CoursesOnTags[]
+  projects ProjectsOnTags[]
+  topics   TopicsOnTags[]
 }
 
 model Blog {
@@ -221,13 +237,13 @@ model Rate {
 }
 
 model City {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   nameEng   String
   nameVn    String
-  code      String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   districts District[]
 }
 
@@ -255,4 +271,48 @@ model Ward {
 
   districtCode String
   district     District @relation(fields: [districtCode], references: [code], onDelete: Cascade)
+}
+
+model StudentsOnCourses {
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([studentId, courseId])
+}
+
+model CoursesOnTags {
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([courseId, tagId])
+}
+
+model ProjectsOnTags {
+  projectId String
+  project   CourseProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       Tag           @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@id([projectId, tagId])
+}
+
+model TopicsOnTags {
+  topicId   String
+  topic     CourseTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       Tag         @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@id([topicId, tagId])
 }

@@ -4,58 +4,56 @@ import {
   Post,
   Put,
   Delete,
-  Query,
   Body,
+  Query,
   HttpCode,
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { CourseService } from './course.service';
+import { OutputService } from './output.service';
 import { QueryDto } from 'src/common/dto/base.dto';
-import { CourseDto } from 'src/common/dto/course.dto';
+import { OutputDto } from 'src/common/dto/output.dto';
 import { QueryPaging } from 'src/common/decorator/query.decorator';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { ERole } from 'common/enum/student';
 import { JwtGuard } from 'src/common/guard/jwt.guard';
 import { RoleGuard } from 'src/common/guard/role.guard';
 
-@Controller('api/course')
-export class CourseController {
-  constructor(private courseService: CourseService) {}
+@Controller('api/output')
+export class OutputController {
+  constructor(private outputService: OutputService) {}
 
   @Get('listPaging')
-  @Roles(ERole.ADMIN)
-  @UseGuards(JwtGuard, RoleGuard)
-  getCoursesPaging(@QueryPaging() query: QueryDto) {
-    return this.courseService.getCoursesPaging(query);
+  getOutputsPaging(@QueryPaging() query: QueryDto) {
+    return this.outputService.getOuputsPaging(query);
   }
 
   @Get('detail')
-  getCourse(@Query() query: QueryDto) {
-    return this.courseService.getCourse(query);
+  getOutput(@Query() query: QueryDto) {
+    return this.outputService.getOutput(query);
   }
 
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createCourse(@Body() course: CourseDto) {
-    return this.courseService.createCourse(course);
+  createOutput(@Body() output: OutputDto) {
+    return this.outputService.createOutput(output);
   }
 
   @Put('update')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  updateCourse(@Query() query: QueryDto, @Body() course: CourseDto) {
-    return this.courseService.updateCourse(query, course);
+  updateOutput(@Query() query: QueryDto, @Body() output: OutputDto) {
+    return this.outputService.updateOutput(query, output);
   }
 
   @Delete('remove')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  removeCourse(@Query() query: QueryDto) {
-    return this.courseService.removeCourse(query);
+  removeOutput(@Query() query: QueryDto) {
+    return this.outputService.removeOutput(query);
   }
 }

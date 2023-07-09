@@ -40,13 +40,14 @@ CREATE TABLE `Course` (
     `id` VARCHAR(191) NOT NULL,
     `nameEng` VARCHAR(191) NOT NULL,
     `nameVn` VARCHAR(191) NOT NULL,
-    `descriptEng` VARCHAR(191) NOT NULL,
-    `descriptVn` VARCHAR(191) NOT NULL,
+    `descriptEng` VARCHAR(2500) NOT NULL,
+    `descriptVn` VARCHAR(2500) NOT NULL,
     `fee` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
-    `projectInfoEng` VARCHAR(191) NULL,
-    `projectInfoVn` VARCHAR(191) NULL,
+    `projectInfoEng` VARCHAR(2500) NULL,
+    `projectInfoVn` VARCHAR(2500) NULL,
+    `categoryId` VARCHAR(191) NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -54,8 +55,8 @@ CREATE TABLE `Course` (
 -- CreateTable
 CREATE TABLE `CourseOutput` (
     `id` VARCHAR(191) NOT NULL,
-    `contentEng` VARCHAR(191) NOT NULL,
-    `contentVn` VARCHAR(191) NOT NULL,
+    `contentEng` VARCHAR(2500) NOT NULL,
+    `contentVn` VARCHAR(2500) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `courseId` VARCHAR(191) NOT NULL,
@@ -93,8 +94,8 @@ CREATE TABLE `CourseTopic` (
 CREATE TABLE `CourseProject` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
-    `descriptEng` VARCHAR(191) NOT NULL,
-    `descriptVn` VARCHAR(191) NOT NULL,
+    `descriptEng` VARCHAR(2500) NOT NULL,
+    `descriptVn` VARCHAR(2500) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `courseId` VARCHAR(191) NOT NULL,
@@ -117,8 +118,8 @@ CREATE TABLE `ProjectTask` (
 -- CreateTable
 CREATE TABLE `TaskToDo` (
     `id` VARCHAR(191) NOT NULL,
-    `contentEng` VARCHAR(191) NOT NULL,
-    `contentVn` VARCHAR(191) NOT NULL,
+    `contentEng` VARCHAR(2500) NOT NULL,
+    `contentVn` VARCHAR(2500) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `taskId` VARCHAR(191) NOT NULL,
@@ -132,7 +133,7 @@ CREATE TABLE `ClassRoom` (
     `name` VARCHAR(191) NOT NULL,
     `openDate` VARCHAR(191) NOT NULL,
     `time` VARCHAR(191) NOT NULL,
-    `location` VARCHAR(191) NOT NULL,
+    `location` INTEGER NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `courseId` VARCHAR(191) NOT NULL,
@@ -143,8 +144,7 @@ CREATE TABLE `ClassRoom` (
 -- CreateTable
 CREATE TABLE `Tag` (
     `id` VARCHAR(191) NOT NULL,
-    `nameEng` VARCHAR(191) NOT NULL,
-    `nameVn` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -154,7 +154,7 @@ CREATE TABLE `Tag` (
 -- CreateTable
 CREATE TABLE `Blog` (
     `id` VARCHAR(191) NOT NULL,
-    `content` VARCHAR(191) NOT NULL,
+    `content` VARCHAR(3000) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -164,7 +164,7 @@ CREATE TABLE `Blog` (
 -- CreateTable
 CREATE TABLE `Comment` (
     `id` VARCHAR(191) NOT NULL,
-    `commentText` VARCHAR(191) NOT NULL,
+    `commentText` VARCHAR(2500) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
     `studentId` VARCHAR(191) NOT NULL,
@@ -178,6 +178,7 @@ CREATE TABLE `Comment` (
 CREATE TABLE `Rate` (
     `id` VARCHAR(191) NOT NULL,
     `point` INTEGER NOT NULL,
+    `note` VARCHAR(2500) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated` DATETIME(3) NOT NULL,
     `studentId` VARCHAR(191) NOT NULL,
@@ -262,6 +263,9 @@ CREATE TABLE `_CourseProjectToTag` (
     UNIQUE INDEX `_CourseProjectToTag_AB_unique`(`A`, `B`),
     INDEX `_CourseProjectToTag_B_index`(`B`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Course` ADD CONSTRAINT `Course_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `Category`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `CourseOutput` ADD CONSTRAINT `CourseOutput_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `Course`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

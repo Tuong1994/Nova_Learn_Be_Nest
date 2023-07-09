@@ -86,7 +86,7 @@ const courseTopic: CourseTopic[] = [
   },
   {
     id: 'CT_0011',
-    nameEng: '',
+    nameEng: 'Git, Team Management Tool, Scrum/Agile Model',
     nameVn: 'Git, công cụ quản lý nhóm, mô hình Scrum/Agile',
     courseId: 'C_0001',
     createdAt: new Date(),

@@ -13,6 +13,9 @@ import city from './city.seed';
 import district from './district.seed';
 import ward from './ward.seed';
 import classRoom from './class.seed';
+import coursesOnTags from './courses-on-tags.seed';
+import projectsOnTags from './projects-on-tags.seed';
+import topicsOnTags from './topics-on-tags.seed';
 
 const prisma = new PrismaClient();
 
@@ -31,6 +34,9 @@ const main = async () => {
   await prisma.city.createMany({ data: city });
   await prisma.district.createMany({ data: district });
   await prisma.ward.createMany({ data: ward });
+  await prisma.coursesOnTags.createMany({ data: coursesOnTags });
+  await prisma.projectsOnTags.createMany({ data: projectsOnTags });
+  await prisma.topicsOnTags.createMany({ data: topicsOnTags });
 };
 
 main()
