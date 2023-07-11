@@ -16,7 +16,7 @@ export class StudentService {
 
     const students = await this.prisma.student.findMany();
 
-    let collection: IPaging<Student>;
+    let collection: IPaging<Student> = helper.getDefaultCollection();
 
     if (students && students.length) collection = utils.paging<Student>(students, page, limit);
 

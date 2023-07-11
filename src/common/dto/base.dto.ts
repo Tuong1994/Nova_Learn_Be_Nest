@@ -8,6 +8,14 @@ export class QueryDto {
   studentId?: string;
   courseId?: string;
   outputId?: string;
+  durationId?: string;
+  topicId?: string;
+  projectId?: string;
+  taskId?: string;
+  todoId?: string;
+  classRoomId?: string
+  tagId?: string;
+  blogId?: string;
 
   projects?: boolean;
   outputs?: boolean;

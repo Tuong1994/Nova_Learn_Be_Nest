@@ -1,25 +1,25 @@
 import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
-import { CourseOutputController } from './output.controller';
-import { CourseOutputService } from './output.service';
+import { ProjectTaskController } from './task.controller';
+import { ProjectTaskService } from './task.service';
 import { CheckIdMiddleware } from 'src/common/middlewares/checkId.middleware';
 
 @Module({
-  controllers: [CourseOutputController],
-  providers: [CourseOutputService],
+  controllers: [ProjectTaskController],
+  providers: [ProjectTaskService],
 })
-export class CourseOutputModule implements NestModule {
+export class ProjectTaskModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CheckIdMiddleware).forRoutes(
       {
-        path: 'api/output/detail',
+        path: 'api/task/detail',
         method: RequestMethod.GET,
       },
       {
-        path: 'api/output/update',
+        path: 'api/task/update',
         method: RequestMethod.PUT,
       },
       {
-        path: 'api/output/remove',
+        path: 'api/task/remove',
         method: RequestMethod.DELETE,
       },
     );

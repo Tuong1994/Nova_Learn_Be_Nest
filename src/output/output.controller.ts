@@ -10,7 +10,7 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { OutputService } from './output.service';
+import { CourseOutputService } from './output.service';
 import { QueryDto } from 'src/common/dto/base.dto';
 import { OutputDto } from 'src/common/dto/output.dto';
 import { QueryPaging } from 'src/common/decorator/query.decorator';
@@ -20,17 +20,17 @@ import { JwtGuard } from 'src/common/guard/jwt.guard';
 import { RoleGuard } from 'src/common/guard/role.guard';
 
 @Controller('api/output')
-export class OutputController {
-  constructor(private outputService: OutputService) {}
+export class CourseOutputController {
+  constructor(private courseOutputService: CourseOutputService) {}
 
   @Get('listPaging')
   getOutputsPaging(@QueryPaging() query: QueryDto) {
-    return this.outputService.getOuputsPaging(query);
+    return this.courseOutputService.getOuputsPaging(query);
   }
 
   @Get('detail')
   getOutput(@Query() query: QueryDto) {
-    return this.outputService.getOutput(query);
+    return this.courseOutputService.getOutput(query);
   }
 
   @Post('create')
@@ -38,7 +38,7 @@ export class OutputController {
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   createOutput(@Body() output: OutputDto) {
-    return this.outputService.createOutput(output);
+    return this.courseOutputService.createOutput(output);
   }
 
   @Put('update')
@@ -46,7 +46,7 @@ export class OutputController {
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   updateOutput(@Query() query: QueryDto, @Body() output: OutputDto) {
-    return this.outputService.updateOutput(query, output);
+    return this.courseOutputService.updateOutput(query, output);
   }
 
   @Delete('remove')
@@ -54,6 +54,6 @@ export class OutputController {
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
   removeOutput(@Query() query: QueryDto) {
-    return this.outputService.removeOutput(query);
+    return this.courseOutputService.removeOutput(query);
   }
 }

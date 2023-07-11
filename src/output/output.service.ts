@@ -5,9 +5,10 @@ import { QueryDto } from 'src/common/dto/base.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OutputDto } from 'src/common/dto/output.dto';
 import utils from 'src/common/utils';
+import helper from 'src/common/helper';
 
 @Injectable()
-export class OutputService {
+export class CourseOutputService {
   constructor(private prisma: PrismaService) {}
 
   async getOuputsPaging(query: QueryDto) {
@@ -15,7 +16,7 @@ export class OutputService {
 
     const outputs = await this.prisma.courseOutput.findMany();
 
-    let collection: IPaging<CourseOutput>;
+    let collection: IPaging<CourseOutput> = helper.getDefaultCollection();
 
     if (outputs && outputs.length) collection = utils.paging<CourseOutput>(outputs, page, limit);
 

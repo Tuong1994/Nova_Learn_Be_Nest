@@ -10,50 +10,50 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { CourseService } from './course.service';
-import { QueryDto } from 'src/common/dto/base.dto';
-import { CourseDto } from 'src/common/dto/course.dto';
+import { TagService } from './tag.service';
 import { QueryPaging } from 'src/common/decorator/query.decorator';
+import { QueryDto } from 'src/common/dto/base.dto';
+import { TagDto } from 'src/common/dto/tag.dto';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { ERole } from 'common/enum/student';
 import { JwtGuard } from 'src/common/guard/jwt.guard';
 import { RoleGuard } from 'src/common/guard/role.guard';
 
-@Controller('api/course')
-export class CourseController {
-  constructor(private courseService: CourseService) {}
+@Controller('api/tag')
+export class TagController {
+  constructor(private tagService: TagService) {}
 
   @Get('listPaging')
-  getCoursesPaging(@QueryPaging() query: QueryDto) {
-    return this.courseService.getCoursesPaging(query);
+  getTagsPaging(@QueryPaging() query: QueryDto) {
+    return this.tagService.getTagsPaging(query);
   }
 
   @Get('detail')
-  getCourse(@Query() query: QueryDto) {
-    return this.courseService.getCourse(query);
+  getTag(@Query() query: QueryDto) {
+    return this.tagService.getTag(query);
   }
 
   @Post('create')
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createCourse(@Body() course: CourseDto) {
-    return this.courseService.createCourse(course);
+  createTag(@Body() tag: TagDto) {
+    return this.tagService.createTag(tag);
   }
 
   @Put('update')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  updateCourse(@Query() query: QueryDto, @Body() course: CourseDto) {
-    return this.courseService.updateCourse(query, course);
+  updateTag(@Query() query: QueryDto, @Body() tag: TagDto) {
+    return this.tagService.updateTag(query, tag);
   }
 
   @Delete('remove')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  removeCourse(@Query() query: QueryDto) {
-    return this.courseService.removeCourse(query);
+  removeTag(@Query() query: QueryDto) {
+    return this.tagService.removeTag(query);
   }
 }

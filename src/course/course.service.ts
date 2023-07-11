@@ -5,6 +5,7 @@ import { QueryDto } from 'src/common/dto/base.dto';
 import { CourseDto } from 'src/common/dto/course.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import utils from 'src/common/utils';
+import helper from 'src/common/helper';
 
 @Injectable()
 export class CourseService {
@@ -15,7 +16,7 @@ export class CourseService {
 
     const courses = await this.prisma.course.findMany();
 
-    let collection: IPaging<Course>;
+    let collection: IPaging<Course> = helper.getDefaultCollection();
 
     if (courses && courses.length) collection = utils.paging<Course>(courses, page, limit);
 
@@ -154,7 +155,6 @@ export class CourseService {
       fee,
       projectInfoEng,
       projectInfoVn,
-      duration,
       outputs,
     } = course;
 

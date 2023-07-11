@@ -1,8 +1,13 @@
 import { PrismaClient } from '@prisma/client';
+import { Response, NextFunction } from 'express';
 
 const prisma = new PrismaClient();
 
 const helper = {
+  getDefaultCollection: () => {
+    return { total: 0, page: 1, items: [] };
+  },
+
   getFullName: (firstName: string, lastName: string) => {
     if (!firstName && !lastName) return '';
 
@@ -39,6 +44,22 @@ const helper = {
     addr.fullAddressVn = `${address} ${ward.nameVn} ${district.nameVn} ${city.nameVn}`;
 
     return addr;
+  },
+
+  checkRecord: async (arg: {
+    model: any;
+    id: string;
+    message: string;
+    res: Response;
+    next: NextFunction;
+  }) => {
+    const { model, id, message, res, next } = arg;
+
+    const record = await model.findUnique({ where: { id } });
+
+    if (!record) res.status(404).json({ statusCode: 404, message });
+
+    next();
   },
 };
 
