@@ -1,5 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Blog, PrismaClient } from '@prisma/client';
+import { Blog } from '@prisma/client';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { IPaging } from 'common/interface/base';
 import { QueryDto } from 'src/common/dto/base.dto';
 import { BlogDto } from 'src/common/dto/blog.dto';
@@ -8,7 +9,7 @@ import utils from 'src/common/utils';
 
 @Injectable()
 export class BlogService {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma: PrismaService) {}
 
   async getBlogsPaging(query: QueryDto) {
     const { page, limit } = query;
