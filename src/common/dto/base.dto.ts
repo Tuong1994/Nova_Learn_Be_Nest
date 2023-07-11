@@ -13,9 +13,14 @@ export class QueryDto {
   projectId?: string;
   taskId?: string;
   todoId?: string;
-  classRoomId?: string
+  classRoomId?: string;
   tagId?: string;
   blogId?: string;
+  commentId?: string;
+  rateId?: string;
+  cityId?: string;
+  districtId?: string;
+  wardId?: string;
 
   projects?: boolean;
   outputs?: boolean;

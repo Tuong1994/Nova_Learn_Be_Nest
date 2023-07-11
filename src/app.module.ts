@@ -13,6 +13,9 @@ import { TaskToDoModule } from './todo/todo.module';
 import { ClassRoomModule } from './classroom/classroom.module';
 import { TagModule } from './tag/tag.module';
 import { BlogModule } from './blog/blog.module';
+import { CommentModule } from './comment/comment.module';
+import { RateModule } from './rate/rate.module';
+import { CityModule } from './city/city.module';
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { BlogModule } from './blog/blog.module';
     ClassRoomModule,
     TagModule,
     BlogModule,
+    CommentModule,
+    RateModule,
+    CityModule,
   ],
 })
 export class AppModule {}

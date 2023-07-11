@@ -18,6 +18,13 @@ export class CheckIdMiddleware implements NestMiddleware {
       taskId,
       todoId,
       classRoomId,
+      tagId,
+      blogId,
+      commentId,
+      rateId,
+      cityId,
+      districtId,
+      wardId,
       ids,
     } = req.query;
 
@@ -31,7 +38,14 @@ export class CheckIdMiddleware implements NestMiddleware {
       !projectId &&
       !taskId &&
       !todoId &&
-      !classRoomId
+      !classRoomId &&
+      !tagId &&
+      !blogId &&
+      !commentId &&
+      !rateId &&
+      !cityId &&
+      !districtId &&
+      !wardId
     )
       throw new HttpException('Id is not provided', HttpStatus.BAD_REQUEST);
 
@@ -136,5 +150,84 @@ export class CheckIdMiddleware implements NestMiddleware {
         next,
       });
     }
+
+    // Tag
+    if (tagId) {
+      helper.checkRecord({
+        model: this.prisma.tag,
+        id: String(tagId),
+        message: 'Tag not found',
+        res,
+        next,
+      });
+    }
+
+    // Blog
+    if (blogId) {
+      helper.checkRecord({
+        model: this.prisma.blog,
+        id: String(blogId),
+        message: 'Blog not found',
+        res,
+        next,
+      });
+    }
+
+    // Comment
+    if (commentId) {
+      helper.checkRecord({
+        model: this.prisma.comment,
+        id: String(commentId),
+        message: 'Comment not found',
+        res,
+        next,
+      });
+    }
+
+    // Rate
+    if (rateId) {
+      helper.checkRecord({
+        model: this.prisma.rate,
+        id: String(rateId),
+        message: 'Rate not found',
+        res,
+        next,
+      });
+    }
+
+    // City
+    if (cityId) {
+      helper.checkRecord({
+        model: this.prisma.city,
+        id: String(cityId),
+        message: 'City not found',
+        res,
+        next,
+      });
+    }
+
+    // District
+    if (districtId) {
+      helper.checkRecord({
+        model: this.prisma.district,
+        id: String(districtId),
+        message: 'District not found',
+        res,
+        next,
+      });
+    }
+
+    // Ward
+    if (wardId) {
+      helper.checkRecord({
+        model: this.prisma.ward,
+        id: String(wardId),
+        message: 'Ward not found',
+        res,
+        next,
+      });
+    }
+
+    throw new HttpException('Record not found', HttpStatus.BAD_REQUEST);
   }
 }

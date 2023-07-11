@@ -1,25 +1,25 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { CommentController } from './comment.controller';
-import { CommentService } from './comment.service';
+import { RateController } from './rate.controller';
+import { RateService } from './rate.service';
 import { CheckIdMiddleware } from 'src/common/middlewares/checkId.middleware';
 
 @Module({
-  controllers: [CommentController],
-  providers: [CommentService],
+  controllers: [RateController],
+  providers: [RateService],
 })
-export class CommentModule implements NestModule {
+export class RateModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CheckIdMiddleware).forRoutes(
       {
-        path: 'api/comment/detail',
+        path: 'api/rate/detail',
         method: RequestMethod.GET,
       },
       {
-        path: 'api/comment/update',
+        path: 'api/rate/update',
         method: RequestMethod.PUT,
       },
       {
-        path: 'api/comment/remove',
+        path: 'api/rate/remove',
         method: RequestMethod.DELETE,
       },
     );

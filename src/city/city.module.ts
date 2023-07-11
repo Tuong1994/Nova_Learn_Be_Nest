@@ -1,25 +1,25 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { CommentController } from './comment.controller';
-import { CommentService } from './comment.service';
+import { CityController } from './city.controller';
+import { CityService } from './city.service';
 import { CheckIdMiddleware } from 'src/common/middlewares/checkId.middleware';
 
 @Module({
-  controllers: [CommentController],
-  providers: [CommentService],
+  controllers: [CityController],
+  providers: [CityService],
 })
-export class CommentModule implements NestModule {
+export class CityModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(CheckIdMiddleware).forRoutes(
       {
-        path: 'api/comment/detail',
+        path: 'api/city/detail',
         method: RequestMethod.GET,
       },
       {
-        path: 'api/comment/update',
+        path: 'api/city/update',
         method: RequestMethod.PUT,
       },
       {
-        path: 'api/comment/remove',
+        path: 'api/city/remove',
         method: RequestMethod.DELETE,
       },
     );
