@@ -37,7 +37,7 @@ export class TaskToDoController {
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createToDo(@Body() toDo: ToDoDto) {
+  createToDo(@Body() toDo: ToDoDto[]) {
     return this.taskToDoService.createToDo(toDo);
   }
 

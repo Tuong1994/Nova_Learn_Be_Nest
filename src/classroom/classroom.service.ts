@@ -29,6 +29,7 @@ export class ClassRoomService {
 
     const classRoom = await this.prisma.classRoom.findUnique({
       where: { id: String(classRoomId) },
+      include: { course: true },
     });
 
     return classRoom;

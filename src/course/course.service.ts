@@ -155,7 +155,6 @@ export class CourseService {
       fee,
       projectInfoEng,
       projectInfoVn,
-      outputs,
     } = course;
 
     await this.prisma.course.update({
@@ -173,31 +172,6 @@ export class CourseService {
         projectInfoVn,
       },
     });
-
-    const courseDetail = await this.prisma.course.findUnique({
-      where: { id: String(courseId) },
-      include: {
-        outputs: true,
-      },
-    });
-
-    if (courseDetail) {
-      if (courseDetail.outputs && courseDetail.outputs.length)
-        outputs.forEach(async (output) => {
-          await this.prisma.courseOutput.update({
-            where: { id: output.id },
-            data: output,
-          });
-        });
-      else {
-        if (outputs && outputs.length) {
-          const data = outputs.map((output) => {
-            return { ...output, courseId: String(courseId) };
-          });
-          await this.prisma.courseOutput.createMany({ data });
-        }
-      }
-    }
 
     throw new HttpException('Update success', HttpStatus.OK);
   }

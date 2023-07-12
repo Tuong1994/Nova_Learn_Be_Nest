@@ -37,7 +37,7 @@ export class CourseTopicController {
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createTopic(@Body() topic: TopicDto) {
+  createTopic(@Body() topic: TopicDto[]) {
     return this.courseTopicService.createTopic(topic);
   }
 

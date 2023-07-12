@@ -31,14 +31,15 @@ export class CourseTopicService {
     return topic;
   }
 
-  async createTopic(topic: TopicDto) {
-    const { nameEng, nameVn, courseId } = topic;
+  async createTopic(topic: TopicDto[]) {
+    if (topic && !topic.length)
+      throw new HttpException('Topic is required', HttpStatus.BAD_REQUEST);
 
-    const newTopic = await this.prisma.courseTopic.create({
-      data: { nameEng, nameVn, courseId },
+    await this.prisma.courseTopic.createMany({
+      data: topic,
     });
 
-    return newTopic;
+    throw new HttpException('Create success', HttpStatus.CREATED);
   }
 
   async updateTopic(query: QueryDto, topic: TopicDto) {

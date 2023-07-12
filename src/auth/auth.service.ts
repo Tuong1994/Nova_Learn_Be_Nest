@@ -25,17 +25,17 @@ export class AuthService {
     private config: ConfigService,
   ) {}
 
-  async getAccessToken(payload: TokenPayload) {
-    const token = await this.jwt.signAsync(payload, {
+  getAccessToken(payload: TokenPayload) {
+    const token = this.jwt.signAsync(payload, {
       secret: this.config.get('ACCESS_TOKEN_SECRET'),
-      expiresIn: '15m',
+      expiresIn: '24h',
     });
 
     return token;
   }
 
-  async getRefreshToken(payload: TokenPayload) {
-    const token = await this.jwt.signAsync(payload, {
+  getRefreshToken(payload: TokenPayload) {
+    const token = this.jwt.signAsync(payload, {
       secret: this.config.get('REFRESH_TOKEN_SECRET'),
       expiresIn: '24h',
     });
@@ -48,7 +48,7 @@ export class AuthService {
 
     const existAcc = await this.prisma.student.findUnique({ where: { account: String(account) } });
 
-    if (existAcc) new ForbiddenException('Account is already exist');
+    if (existAcc) throw new ForbiddenException('Account is already exist');
 
     const newAccount = await this.prisma.student.create({
       data: {

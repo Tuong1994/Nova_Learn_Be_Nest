@@ -227,7 +227,5 @@ export class CheckIdMiddleware implements NestMiddleware {
         next,
       });
     }
-
-    throw new HttpException('Record not found', HttpStatus.BAD_REQUEST);
   }
 }

@@ -31,14 +31,12 @@ export class TaskToDoService {
     return toDo;
   }
 
-  async createToDo(toDo: ToDoDto) {
-    const { contentEng, contentVn, taskId } = toDo;
+  async createToDo(toDo: ToDoDto[]) {
+    if (toDo && !toDo.length) throw new HttpException('To do is required', HttpStatus.BAD_REQUEST);
 
-    const newToDo = await this.prisma.taskToDo.create({
-      data: { contentEng, contentVn, taskId },
-    });
+    await this.prisma.taskToDo.createMany({ data: toDo });
 
-    return newToDo;
+    throw new HttpException('Create success', HttpStatus.CREATED);
   }
 
   async updateToDo(query: QueryDto, toDo: ToDoDto) {

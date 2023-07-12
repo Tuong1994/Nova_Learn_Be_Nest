@@ -57,7 +57,7 @@ const helper = {
 
     const record = await model.findUnique({ where: { id } });
 
-    if (!record) res.status(404).json({ statusCode: 404, message });
+    if (!record) return res.status(404).json({ statusCode: 404, message });
 
     next();
   },

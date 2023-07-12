@@ -18,7 +18,8 @@ export class CourseDurationService {
 
     let collection: IPaging<CourseDuration> = helper.getDefaultCollection();
 
-    if (durations && durations.length) collection = utils.paging<CourseDuration>(durations, page, limit);
+    if (durations && durations.length)
+      collection = utils.paging<CourseDuration>(durations, page, limit);
 
     return collection;
   }
@@ -35,6 +36,14 @@ export class CourseDurationService {
 
   async createDuration(duration: DurationDto) {
     const { month, week, session, courseId } = duration;
+
+    const course = await this.prisma.course.findUnique({
+      where: { id: String(courseId) },
+      include: { duration: true },
+    });
+
+    if (course && course.duration)
+      throw new HttpException('Course already have duration', HttpStatus.BAD_REQUEST);
 
     const newDuration = await this.prisma.courseDuration.create({
       data: {
