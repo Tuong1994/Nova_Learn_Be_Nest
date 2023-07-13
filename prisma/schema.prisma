@@ -49,8 +49,11 @@ model Image {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  studentId String  @unique
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String?  @unique
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  courseId String? @unique
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model Auth {
@@ -96,6 +99,7 @@ model Course {
   comments Comment[]
 
   duration CourseDuration?
+  image    Image?
 }
 
 model CourseOutput {

@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateStudentDto {
   @IsNotEmpty()
@@ -14,7 +14,6 @@ export class CreateStudentDto {
   lastName: string;
 
   @IsNotEmpty()
-  @IsPhoneNumber()
   phone: string;
 
   @IsNotEmpty()
@@ -51,7 +50,6 @@ export class UpdateStudentDto {
   lastName: string;
 
   @IsNotEmpty()
-  @IsPhoneNumber()
   phone: string;
 
   @IsNotEmpty()

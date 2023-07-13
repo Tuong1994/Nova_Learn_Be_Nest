@@ -6,6 +6,7 @@ export class QueryDto {
 
   ids?: string;
   studentId?: string;
+  categoryId?: string;
   courseId?: string;
   outputId?: string;
   durationId?: string;

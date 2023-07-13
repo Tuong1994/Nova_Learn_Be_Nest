@@ -9,6 +9,8 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
 import { QueryDto } from 'src/common/dto/base.dto';
@@ -18,6 +20,8 @@ import { Roles } from 'src/common/decorator/role.decorator';
 import { ERole } from 'common/enum/student';
 import { JwtGuard } from 'src/common/guard/jwt.guard';
 import { RoleGuard } from 'src/common/guard/role.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOption } from 'src/common/config/multer.config';
 
 @Controller('api/course')
 export class CourseController {
@@ -37,16 +41,22 @@ export class CourseController {
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createCourse(@Body() course: CourseDto) {
-    return this.courseService.createCourse(course);
+  @UseInterceptors(FileInterceptor('image', multerOption('./assets/image/course')))
+  createCourse(@UploadedFile() file: Express.Multer.File, @Body() course: CourseDto) {
+    return this.courseService.createCourse(file, course);
   }
 
   @Put('update')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  updateCourse(@Query() query: QueryDto, @Body() course: CourseDto) {
-    return this.courseService.updateCourse(query, course);
+  @UseInterceptors(FileInterceptor('image', multerOption('./assets/image/course')))
+  updateCourse(
+    @Query() query: QueryDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() course: CourseDto,
+  ) {
+    return this.courseService.updateCourse(query, file, course);
   }
 
   @Delete('remove')

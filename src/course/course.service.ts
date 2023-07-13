@@ -1,9 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Course } from '@prisma/client';
+import { Course, CourseDuration, CourseOutput } from '@prisma/client';
 import { IPaging } from 'common/interface/base';
 import { QueryDto } from 'src/common/dto/base.dto';
 import { CourseDto } from 'src/common/dto/course.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ImageDto } from 'src/common/dto/image.dto';
 import utils from 'src/common/utils';
 import helper from 'src/common/helper';
 
@@ -37,6 +38,7 @@ export class CourseService {
         projectInfoEng: true,
         projectInfoVn: true,
         fee: true,
+        image: true,
         outputs: outputs ?? false,
         duration: duration ?? false,
         classes: classes ?? false,
@@ -98,7 +100,7 @@ export class CourseService {
     return records;
   }
 
-  async createCourse(course: CourseDto) {
+  async createCourse(file: Express.Multer.File, course: CourseDto) {
     const {
       nameEng,
       nameVn,
@@ -119,15 +121,17 @@ export class CourseService {
         descriptEng,
         descriptVn,
         categoryId,
-        fee,
+        fee: Number(fee),
         projectInfoEng: projectInfoEng ? projectInfoEng : undefined,
         projectInfoVn: projectInfoVn ? projectInfoVn : undefined,
       },
     });
 
     if (newCourse) {
-      if (outputs && outputs.length) {
-        const data = outputs.map((output) => {
+      if (outputs) {
+        const outputJson = helper.parseJson<CourseOutput[]>(outputs);
+
+        const data = outputJson.map((output) => {
           return { ...output, courseId: newCourse.id };
         });
 
@@ -135,16 +139,26 @@ export class CourseService {
       }
 
       if (duration) {
-        const data = { ...duration, courseId: newCourse.id };
+        const durationJson = helper.parseJson<CourseDuration>(duration);
+
+        const data = { ...durationJson, courseId: newCourse.id };
 
         await this.prisma.courseDuration.create({ data });
+      }
+
+      if (file) {
+        const image = helper.getImage({ t: 'single', f: file }) as ImageDto;
+
+        const data = { ...image, courseId: newCourse.id };
+
+        await this.prisma.image.create({ data });
       }
     }
 
     return newCourse;
   }
 
-  async updateCourse(query: QueryDto, course: CourseDto) {
+  async updateCourse(query: QueryDto, file: Express.Multer.File, course: CourseDto) {
     const { courseId } = query;
     const {
       nameEng,
@@ -167,11 +181,35 @@ export class CourseService {
         descriptEng,
         descriptVn,
         categoryId,
-        fee,
+        fee: Number(fee),
         projectInfoEng,
         projectInfoVn,
       },
     });
+
+    if (file) {
+      const image = helper.getImage({ t: 'single', f: file }) as ImageDto;
+
+      const data = { ...image, courseId: String(courseId) };
+
+      const course = await this.prisma.course.findUnique({
+        where: { id: String(courseId) },
+        select: { image: true },
+      });
+
+      if (course) {
+        if (course.image) {
+          utils.removeFile(course.image.removePath);
+
+          await this.prisma.image.update({
+            where: { id: course.image.id },
+            data,
+          });
+        } else {
+          await this.prisma.image.create({ data });
+        }
+      }
+    }
 
     throw new HttpException('Update success', HttpStatus.OK);
   }

@@ -21,14 +21,14 @@ export class CourseDto {
   fee: number;
 
   @IsOptional()
-  duration: CourseDuration;
-
-  @IsOptional()
-  outputs: CourseOutput[]
-
-  @IsOptional()
   projectInfoEng: string;
 
   @IsOptional()
   projectInfoVn: string;
+
+  @IsOptional()
+  duration: string;
+
+  @IsOptional()
+  outputs: string;
 }

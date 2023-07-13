@@ -9,6 +9,8 @@ import {
   Query,
   Body,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { QueryDto } from 'src/common/dto/base.dto';
@@ -18,6 +20,8 @@ import { JwtGuard } from 'src/common/guard/jwt.guard';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { ERole } from 'common/enum/student';
 import { QueryPaging } from 'src/common/decorator/query.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { multerOption } from 'src/common/config/multer.config';
 
 @Controller('api/student')
 export class StudentController {
@@ -29,7 +33,6 @@ export class StudentController {
   }
 
   @Get('detail')
-  @UseGuards(JwtGuard)
   getStudent(@Query() query: QueryDto) {
     return this.studentService.getStudent(query);
   }
@@ -38,16 +41,22 @@ export class StudentController {
   @HttpCode(HttpStatus.CREATED)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  createStudent(@Body() student: CreateStudentDto) {
-    return this.studentService.createStudent(student);
+  @UseInterceptors(FileInterceptor('avatar', multerOption('./assets/image/student')))
+  createStudent(@UploadedFile() file: Express.Multer.File, @Body() student: CreateStudentDto) {
+    return this.studentService.createStudent(file, student);
   }
 
   @Put('update')
   @HttpCode(HttpStatus.OK)
   @Roles(ERole.ADMIN)
   @UseGuards(JwtGuard, RoleGuard)
-  updateStudent(@Query() query: QueryDto, @Body() student: UpdateStudentDto) {
-    return this.studentService.updateStudent(query, student);
+  @UseInterceptors(FileInterceptor('avatar', multerOption('./assets/image/student')))
+  updateStudent(
+    @Query() query: QueryDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() student: UpdateStudentDto,
+  ) {
+    return this.studentService.updateStudent(query, file, student);
   }
 
   @Delete('remove')

@@ -16,6 +16,7 @@ import { BlogModule } from './blog/blog.module';
 import { CommentModule } from './comment/comment.module';
 import { RateModule } from './rate/rate.module';
 import { CityModule } from './city/city.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CityModule } from './city/city.module';
     CommentModule,
     RateModule,
     CityModule,
+    UploadModule,
   ],
 })
 export class AppModule {}

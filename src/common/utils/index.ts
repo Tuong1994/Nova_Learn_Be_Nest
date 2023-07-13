@@ -1,4 +1,5 @@
 import * as bcryptjs from 'bcryptjs';
+import * as fs from 'fs';
 
 const utils = {
   hash: (p: string) => {
@@ -23,6 +24,16 @@ const utils = {
     const items = records.slice(start, end);
 
     return { total, page, items };
+  },
+
+  removeFile: (path: string, message?: string) => {
+    if (!path) return;
+
+    return fs.unlink(path, (err) => {
+      if (err) throw err;
+
+      console.log(message ?? 'File is deleted');
+    });
   },
 };
 
