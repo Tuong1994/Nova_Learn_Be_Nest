@@ -41,21 +41,6 @@ model Student {
   avatar Image?
 }
 
-model Image {
-  id         String   @id @default(uuid())
-  path       String
-  removePath String
-  size       Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  studentId String?  @unique
-  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  courseId String? @unique
-  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
-}
-
 model Auth {
   id        String   @id @default(uuid())
   token     String   @unique
@@ -275,6 +260,21 @@ model Ward {
 
   districtCode String
   district     District @relation(fields: [districtCode], references: [code], onDelete: Cascade)
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  path       String
+  removePath String
+  size       Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  studentId String?  @unique
+  student   Student? @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  courseId String? @unique
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
 }
 
 model StudentsOnCourses {
