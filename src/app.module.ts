@@ -17,6 +17,7 @@ import { CommentModule } from './comment/comment.module';
 import { RateModule } from './rate/rate.module';
 import { CityModule } from './city/city.module';
 import { UploadModule } from './upload/upload.module';
+import { RegistrationModule } from './registration/registration.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { UploadModule } from './upload/upload.module';
     RateModule,
     CityModule,
     UploadModule,
+    RegistrationModule,
   ],
 })
 export class AppModule {}

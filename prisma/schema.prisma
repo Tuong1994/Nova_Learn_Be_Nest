@@ -34,9 +34,10 @@ model Student {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  comments Comment[]
-  rates    Rate[]
-  courses  StudentsOnCourses[]
+  comments      Comment[]
+  rates         Rate[]
+  courses       StudentsOnCourses[]
+  registrations Registration[]
 
   avatar Image?
 }
@@ -74,14 +75,15 @@ model Course {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  outputs  CourseOutput[]
-  topics   CourseTopic[]
-  projects CourseProject[]
-  classes  ClassRoom[]
-  tags     CoursesOnTags[]
-  rates    Rate[]
-  students StudentsOnCourses[]
-  comments Comment[]
+  outputs      CourseOutput[]
+  topics       CourseTopic[]
+  projects     CourseProject[]
+  classes      ClassRoom[]
+  tags         CoursesOnTags[]
+  rates        Rate[]
+  students     StudentsOnCourses[]
+  comments     Comment[]
+  registrations Registration[]
 
   duration CourseDuration?
   image    Image?
@@ -173,6 +175,21 @@ model ClassRoom {
 
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  registrations Registration[]
+}
+
+model Registration {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId    String
+  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  classroomId String
+  classroom   ClassRoom @relation(fields: [classroomId], references: [id], onDelete: Cascade)
+  studentId   String
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model Tag {
