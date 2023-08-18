@@ -75,14 +75,14 @@ model Course {
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  outputs      CourseOutput[]
-  topics       CourseTopic[]
-  projects     CourseProject[]
-  classes      ClassRoom[]
-  tags         CoursesOnTags[]
-  rates        Rate[]
-  students     StudentsOnCourses[]
-  comments     Comment[]
+  outputs       CourseOutput[]
+  topics        CourseTopic[]
+  projects      CourseProject[]
+  classes       ClassRoom[]
+  tags          CoursesOnTags[]
+  rates         Rate[]
+  students      StudentsOnCourses[]
+  comments      Comment[]
   registrations Registration[]
 
   duration CourseDuration?

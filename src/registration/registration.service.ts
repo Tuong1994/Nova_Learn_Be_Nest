@@ -9,7 +9,7 @@ export class RegistrationService {
   async registration(regisration: RegistrationDto) {
     const { courseId, studentId, classroomId } = regisration;
 
-    const existRegistration = await this.prisma.registration.findUnique({ where: { courseId } });
+    const existRegistration = await this.prisma.registration.findFirst({ where: { courseId } });
 
     if (existRegistration)
       throw new HttpException("You've already register this course", HttpStatus.BAD_REQUEST);
